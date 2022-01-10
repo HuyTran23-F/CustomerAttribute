@@ -1,0 +1,81 @@
+<?php
+
+/** @var \AHT\Customer\Block\Template $block */
+$helper = $this->helper('AHT\Customer\Helper\DataPhoneNumber');
+$allPhone = $helper->getAllPhoneCode();
+
+?>
+
+<fieldset class="fieldset">
+    <legend class="legend">Customer Attribute</legend>
+    <br>
+  
+    <div class="field contact_phone_number required">
+        <label for="contact_phone_number" class="label">Contact phone number</label>
+        <div class="control">
+            <select name="phone_code" id="phone_code">
+                <?php
+                    foreach($allPhone['countries'] as $keys => $value) :
+                ?>
+                <option value="<?= $value['code'] ?>"> <?= $value['name'] . '(' . $value['code'] .')'  ?> </option>
+
+                <?php endforeach ?>
+
+            </select>
+            <input type="tel" id="phone_number" name="phone_number" />
+        </div>
+        <input type="hidden" id="contact_phone_number_hidden" name="contact_phone_number" />
+    </div>
+
+    <div class="field company_type required">
+        <label for="company_type" class="label">Company type</label>
+        <div class="control">
+            <select id="company_type" name="company_type">
+                <option value="0">Please select</option>
+                <option value="1">CBD Manufacturer</option>
+                <option value="2">CBD Brand and Marketing company</option>
+                <option value="3">CBD Extractor</option>
+                <option value="4">Other</option>
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="field organization_name" id="field-other">
+        <label for="organization_name" class="label">Organization name</label>
+        <div class="control">
+            <input type="text" id="organization_name" name="organization_name" />
+        </div>
+    </div>
+</fieldset>
+
+<!-- If CompnayType seleted Other => Input Orginaziation name  appeared -->
+<script>
+    require(['jquery'], function($) {
+        $(document).ready(function() {
+            $('#field-other').hide();
+
+            $('#phone_code').change(function() {
+                var code = $('#phone_code').val();
+                var phone = $('#phone_number').val();
+                $('#contact_phone_number_hidden').val(code + phone);
+            });
+
+            $('#phone_number').change(function() {
+                var code = $('#phone_code').val();
+                var phone = $('#phone_number').val();
+                $('#contact_phone_number_hidden').val(code + "(" + phone + ")");
+            });
+           
+            $('#company_type').change(function() {
+                if ($(this).val() == 4) {
+                    alert("Pls Enter Company Your Name");
+                    $('#field-other').show();
+                } else {
+                    $('#field-other').hide();
+                    $('#organization_name').val('0');
+                }
+            });
+        });
+    });
+</script>
